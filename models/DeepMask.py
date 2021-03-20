@@ -131,21 +131,27 @@ class DeepMask(nn.Module):
         score = self.scoreBranch(feat)
         return mask, score
 
-    def creatTrunk(self):      
-        #pretrained_weights = torch.load('./pretrained/deepmask/DeepMask.pth.tar')##########(deepmask train transfer-learning for init_COCO_DEEPMASK)
+    def creatTrunk(self):        
+        """#(deepmask train transfer-learning for init_COCO_DEEPMASK)
+        #pretrained_weights = torch.load('./pretrained/deepmask/DeepMask.pth.tar')#########
+        """
         resnet50 = torchvision.models.resnet50(pretrained=False)
-        trunk1 = nn.Sequential(*list(resnet50.children())[:-3])
+        trunk1 = nn.Sequential(*list(resnet50.children())[:-3]) #去掉最後三層
         trunk2 = nn.Sequential(
             nn.Conv2d(1024, 128, 1),
             nn.ReLU(inplace=True),
             nn.Conv2d(128, 512, self.fSz)
         )
         model=nn.Sequential(trunk1, trunk2)
-        #model.load_state_dict(pretrained_weights, strict=False)#########
-        return model
         """
-        resnet50 = torchvision.models.resnet50(pretrained=True)   #######
-        trunk1 = nn.Sequential(*list(resnet50.children())[:-3])#去掉最後三層
+        model.load_state_dict(pretrained_weights, strict=False)#########
+        """
+        return model
+
+        #-------this is origin code , use resnet 50 pretrained
+        """ 
+        resnet50 = torchvision.models.resnet50(pretrained=True)  
+        trunk1 = nn.Sequential(*list(resnet50.children())[:-3])  
         trunk2 = nn.Sequential(
             nn.Conv2d(1024, 128, 1),
             nn.ReLU(inplace=True),
