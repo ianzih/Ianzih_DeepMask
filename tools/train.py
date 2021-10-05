@@ -21,6 +21,9 @@ import torchvision.utils as vutils  # visualization
 import colorama
 from tensorboardX import SummaryWriter
 
+
+os.environ["CUDA_VISIBLE_DEVICES"] = "0"
+
 model_names = sorted(name for name in models.__dict__
                      if not name.startswith("__") and
                      callable(models.__dict__[name]))
@@ -31,19 +34,19 @@ parser.add_argument('--rundir', default='./exps/', help='experiments directory')
 parser.add_argument('--dataset', default='coco', choices=dataset_names(),
                     help='data set')
 parser.add_argument('--seed', default=1, type=int, help='manually set RNG seed')
-parser.add_argument('-j', '--workers', default=12, type=int, metavar='N',
+parser.add_argument('-j', '--workers', default=20, type=int, metavar='N',
                     help='number of data loading workers (default: 12)')
 parser.add_argument('--resume', default='', type=str, metavar='PATH',
                     help='path to latest checkpoint (default: none)')
 parser.add_argument('-b', '--batch', default=32, type=int,
                      metavar='N', help='mini-batch size (default: 32)')#32
-parser.add_argument('--lr', '--learning-rate', default=1e-3, type=float,
+parser.add_argument('--lr', '--learning-rate', default=0.00001, type=float,
                     metavar='LR', help='learning rate')
 parser.add_argument('--momentum', default=0.9, type=float, metavar='M',
                     help='momentum')
-parser.add_argument('--weight-decay', '--wd', default=5e-4, type=float,
+parser.add_argument('--weight-decay', '--wd', default=0.0000001, type=float,
                     metavar='W', help='weight decay (default: 5e-4)')
-parser.add_argument('--maxload', default=1500, type=int, metavar='N',
+parser.add_argument('--maxload', default=1000, type=int, metavar='N',
                     help='max number of training batches per epoch') #4000 
 parser.add_argument('--testmaxload', default=500, type=int, metavar='N',
                      help='max number of testing batches')
@@ -63,7 +66,7 @@ parser.add_argument('--hfreq', default=.5, type=float,
                     help='mask/score head sampling frequency')
 parser.add_argument('--scratch', action='store_true',
                     help='train DeepMask with randomly initialize weights')
-parser.add_argument('--arch', '-a', metavar='ARCH', default='DeepMask',
+parser.add_argument('--arch', '-a', metavar='ARCH', default='SharpMask',
                     choices=model_names,
                     help='model architecture: ' + ' | '.join(model_names) +
                          ' (default: DeepMask)')
